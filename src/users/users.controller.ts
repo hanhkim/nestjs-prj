@@ -29,7 +29,6 @@ export class UserController {
 
   @Get(':id')
   getUserById(@Param('id') id: string): Promise<UserDto> {
-    console.log('id :>> ', id);
     return this.userService.findOne(id);
   }
 
