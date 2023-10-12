@@ -12,6 +12,7 @@ import { ExpenseEntity } from './expenses/expense.entity';
 import { WalletEntity } from './wallets/wallet.entity';
 import { ExpenseModule } from './expenses/expense.module';
 import { WalletModule } from './wallets/wallet.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { WalletModule } from './wallets/wallet.module';
     CategoryModule,
     ExpenseModule,
     WalletModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -29,7 +29,6 @@ export class AccountService {
   }
 
   async findOne(id: string): Promise<AccountDto> {
-    console.log('fineOne :>> ', id);
     const user = await this.accountRepository.findOneBy({ id });
 
     return plainToInstance(AccountDto, user, { excludeExtraneousValues: true });
@@ -43,5 +42,13 @@ export class AccountService {
     if (!deletedUser) return { result: 'Delete failed!' };
 
     return { result: 'Delete successful!' };
+  }
+
+  async login(email: string, password): Promise<any> {
+    const user = await this.accountRepository.findOneBy({
+      email: email,
+    });
+
+    return user;
   }
 }

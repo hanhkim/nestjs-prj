@@ -1,0 +1,73 @@
+// PHQ-9
+
+[
+    {
+        "title": "Minimal or No Depression",
+        "mediaId": "fe2772dd-c967-4eb8-97db-309699829d1f",
+        "maxScore": 4,
+        "minScore": 0,
+        "description": "Your score suggest that you are experiencing minimal or no depressive symptoms."
+    },
+    {
+        "title": "Minimal Depression",
+        "mediaId": "7463df12-5ebe-422b-8fee-14bf80f1fb0d",
+        "maxScore": 9,
+        "minScore": 5,
+        "description": "Your score suggest that you are experiencing mild depressive symptoms. These symptoms are generally manageable and should not impact your daily functioning."
+    },
+    {
+        "title": "Moderate Depression",
+        "mediaId": "9c39fcb2-fc34-407a-8d64-218befa3217f",
+        "maxScore": 14,
+        "minScore": 10,
+        "description": "Your score suggest that you are experiencing moderate levels of depression that can affect your daily functioing and mental well-being."
+    },
+    {
+        "title": "Moderately Severe Depression",
+        "mediaId": "e0505511-c8a9-4e52-8cb8-fc91e1f5f7c9",
+        "maxScore": 19,
+        "minScore": 15,
+        "description": "Your score suggest that you are experiencing pronounced symptoms of depression that are likely to affect your daily life, including work, relationship, and overall quality of life."
+    },
+    {
+        "title": "Severe Depression",
+        "mediaId": "362971f2-e529-4199-87e3-b0ee6a2f524b",
+        "maxScore": 27,
+        "minScore": 20,
+        "description": "Your score suggest that you are experiencing severe depressive symptoms that are likely to be impacting your daily functioning substantially."
+    }
+]
+
+
+
+// DAG-7
+[
+    {
+        "title": "Minimal or No Anxiety",
+        "mediaId": "b29d1d48-bce7-481c-937d-74eaeab6ee77",
+        "maxScore": 4,
+        "minScore": 0,
+        "description": "Your score suggest that you are experiencing minimal or no  symptoms generalised anxiety."
+    },
+    {
+        "title": "Mild Anxiety",
+        "mediaId": "86cadf10-e46e-4e65-973a-9547b13c7944",
+        "maxScore": 9,
+        "minScore": 5,
+        "description": "Your score suggest that you are experiencing mild  symptoms of generalised anxiety. These symptoms are generally manageable and should not impact your daily life."
+    },
+    {
+        "title": "Moderate Anxiety",
+        "mediaId": "fbe865dc-8fdd-4cba-b3a8-4f9d10e6ac98",
+        "maxScore": 14,
+        "minScore": 10,
+        "description": "Your score suggest that you are experiencing moderate levels of anxiety that could be interfering with your daily functioning and mental well-being."
+    },
+    {
+        "title": "Severe Anxiety",
+        "mediaId": "5d4c2013-0aae-4c72-b355-653b799caf38",
+        "maxScore": 21,
+        "minScore": 15,
+        "description": "Your score suggest that you are experiencing pronounced symptoms of anxiety that are likely to affect your daily life, including work, relationship, and overall quality of life."
+    }
+]

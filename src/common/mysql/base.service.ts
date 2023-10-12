@@ -18,10 +18,8 @@ export class MysqlBaseService<Entity extends BaseEntity> {
   }
 
   async findOne(id: string): Promise<any> {
-    const user: Entity = await this.repo.findOne({
-      where: {
-        id: id as any,
-      },
+    const user: Entity = await this.repo.findOneBy({
+      id: id as any,
     });
     return user;
   }
