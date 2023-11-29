@@ -44,4 +44,9 @@ export class CategoryService {
 
     return { result: 'Delete successful!' };
   }
+
+  async getAllCategories(): Promise<any> {
+    const list = await this.accountRepository.find();
+    return list;
+  }
 }

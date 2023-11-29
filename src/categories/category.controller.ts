@@ -14,6 +14,11 @@ import { CategoryDto } from './category.dto';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @Get()
+  getAllCategories(): Promise<any> {
+    return this.categoryService.getAllCategories();
+  }
+
   @Post()
   createCategory(@Body() category: CategoryDto): Promise<CategoryDto> {
     return this.categoryService.save(category);

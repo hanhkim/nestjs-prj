@@ -39,3 +39,8 @@ export class AccountDto {
   @Expose()
   status: EStatus;
 }
+
+export class LoginDto {
+  email: string;
+  password: string;
+}

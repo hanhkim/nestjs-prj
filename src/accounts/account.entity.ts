@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
@@ -39,4 +40,10 @@ export class AccountEntity extends BaseEntity {
     default: 'active',
   })
   status: string;
+
+  @Column({
+    nullable: true,
+  })
+  @Exclude()
+  refreshToken?: string;
 }
