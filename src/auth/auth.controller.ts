@@ -1,54 +1,42 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UseGuards,
-  Request,
-  Get,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
-import { Public } from './constants';
-import { RefreshJwtGuard } from './guards/refresh-jwt-auth.guard';
+import { AuthDto } from './dto/auth.dto';
+import { AccessTokenGuard } from './guards/accessToken.guard';
+import { Request } from 'express';
+import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import { AccountDto } from 'src/accounts/account.dto';
-import { AccountService } from 'src/accounts/account.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private accountService: AccountService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Public()
-  @HttpCode(HttpStatus.OK)
   @Post('login')
-  login(@Body() signInDto: Record<string, any>) {
-    return this.authService.login(signInDto.email, signInDto.password);
+  signin(@Body() data: AuthDto) {
+    return this.authService.login(data.email, data.password);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AccessTokenGuard)
+  @Get('logout')
+  logout(@Req() req: Request) {
+    this.authService.logout(req.user['sub'] as unknown as string);
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
+  refreshTokens(@Req() req: Request) {
+    const userId = req.user['sub'];
+    const refreshToken = req.user['refreshToken'];
+    return this.authService.refreshTokens(userId, refreshToken);
+  }
+
+  @UseGuards(AccessTokenGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Req() req) {
     return req.user;
   }
 
-  @UseGuards(AuthGuard)
-  @Post('refresh')
-  refreshToken(@Request() req) {
-    return this.authService.refreshToken(req.user);
-  }
-
-  @Public()
   @Post('register')
   async registerUser(@Body() createAccountDto: AccountDto) {
-    return await this.accountService.save(createAccountDto);
-  }
-
-  @Post('logout')
-  logout(@Body() body: any) {
-    return true;
+    return await this.authService.register(createAccountDto);
   }
 }

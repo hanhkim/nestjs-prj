@@ -38,6 +38,9 @@ export class AccountDto {
 
   @Expose()
   status: EStatus;
+
+  @Expose()
+  refreshToken: string;
 }
 
 export class LoginDto {

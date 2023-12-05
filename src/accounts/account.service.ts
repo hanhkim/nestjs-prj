@@ -37,18 +37,22 @@ export class AccountService {
   async deleteById(id: string): Promise<{ result: string }> {
     const deletedUser = await this.accountRepository.delete(id);
 
-    console.log('deletedUser :>> ', deletedUser);
-
     if (!deletedUser) return { result: 'Delete failed!' };
 
     return { result: 'Delete successful!' };
   }
 
-  async login(email: string, password): Promise<any> {
+  async getUserByEmail(email: string): Promise<any> {
     const user = await this.accountRepository.findOneBy({
       email: email,
     });
 
     return user;
+  }
+
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    await this.accountRepository.update(userId, {
+      refreshToken: refreshToken,
+    });
   }
 }
