@@ -10,7 +10,7 @@ import {
 import { WalletService } from './wallet.service';
 import { WalletDto } from './wallet.dto';
 
-@Controller('wallet')
+@Controller('wallets')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
@@ -35,5 +35,10 @@ export class WalletController {
   @Delete(':id')
   deleteWalletById(@Param('id') id: string): Promise<any> {
     return this.walletService.deleteById(id);
+  }
+
+  @Get()
+  getWalletList(): Promise<WalletDto> {
+    return this.walletService.getWalletList();
   }
 }

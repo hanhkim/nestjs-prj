@@ -22,4 +22,9 @@ export class WalletService extends MysqlBaseService<WalletEntity> {
       excludeExtraneousValues: true,
     });
   }
+
+  async getWalletList(): Promise<any> {
+    const list = await this.walletRepository.find();
+    return list;
+  }
 }

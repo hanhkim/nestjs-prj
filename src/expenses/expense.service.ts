@@ -20,4 +20,12 @@ export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
       excludeExtraneousValues: true,
     });
   }
+
+  async getTransactionList(): Promise<any> {
+    const list = await this.expenseRepository
+      .createQueryBuilder('expense')
+      .orderBy('expense.date', 'DESC')
+      .getMany();
+    return list;
+  }
 }

@@ -6,10 +6,13 @@ import {
   Put,
   Get,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './category.dto';
+import { AccessTokenGuard } from '../auth/guards/accessToken.guard';
 
+@UseGuards(AccessTokenGuard)
 @Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}

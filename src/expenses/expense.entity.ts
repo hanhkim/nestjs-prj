@@ -14,22 +14,26 @@ export class ExpenseEntity extends BaseEntity {
   @Column()
   categoryId: number;
 
-  @Column()
-  type: number;
+  @Column({
+    type: 'enum',
+    enum: ['expensed', 'earned', 'borrowed_lent'],
+    default: 'expensed',
+  })
+  type: string;
 
-  @Column()
+  @Column({ nullable: true })
   note: string;
 
   @Column()
   date: Date;
 
-  @Column()
+  @Column({ nullable: true })
   toWhom: string;
 
-  @Column()
+  @Column({ nullable: true })
   img: string;
 
-  @Column()
+  @Column({ nullable: true })
   userId: string;
 
   @Column()

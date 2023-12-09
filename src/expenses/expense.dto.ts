@@ -10,8 +10,9 @@ export class ExpenseDto {
   @Expose()
   categoryId: number;
 
+  // enum: Expense / Earning/ Borrowed-Lent
   @Expose()
-  type: number;
+  type: string;
 
   @Expose()
   note: string;
@@ -22,11 +23,11 @@ export class ExpenseDto {
   @Expose()
   toWhom: string;
 
-  @Expose()
+  // @Expose()
   img: string;
 
-  @Expose()
-  userId: string; // note: don't remember what meaning of this field
+  // @Expose()
+  userId: string; // note: don't remember what meaning of this field => who add
 
   @Expose()
   walletId: string;
