@@ -12,6 +12,7 @@ import {
 import { ExpenseService } from './expense.service';
 import { ExpenseDto } from './expense.dto';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
+import { Request } from 'express';
 
 @UseGuards(AccessTokenGuard)
 @Controller('transactions')
@@ -44,7 +45,8 @@ export class ExpenseController {
   }
 
   @Get()
-  getTransactionList(): Promise<ExpenseDto> {
-    return this.expenseService.getTransactionList();
+  getTransactionList(@Req() request: Request): Promise<ExpenseDto> {
+    const { month } = request.query;
+    return this.expenseService.getTransactionList(month);
   }
 }

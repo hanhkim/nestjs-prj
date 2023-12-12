@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExpenseDto } from './expense.dto';
 import { plainToInstance } from 'class-transformer';
+import * as dayjs from 'dayjs';
 
 export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
   constructor(
@@ -21,11 +22,20 @@ export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
     });
   }
 
-  async getTransactionList(): Promise<any> {
+  async getTransactionList(month): Promise<any> {
+    const startDate = dayjs(`2023-${month}-01`);
+    const endDate = startDate.endOf('month');
+
     const list = await this.expenseRepository
       .createQueryBuilder('expense')
+      .where('expense.date BETWEEN :startDate AND :endDate', {
+        startDate: startDate.toDate(),
+        endDate: endDate.toDate(),
+      })
+      .leftJoinAndSelect('expense.category', 'category')
       .orderBy('expense.date', 'DESC')
       .getMany();
+
     return list;
   }
 }

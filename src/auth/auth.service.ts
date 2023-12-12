@@ -58,12 +58,12 @@ export class AuthService {
         typeAccess === 'accessToken'
           ? 'KEY_ACCESS_TOKEN_HALI_123'
           : 'KEY_REFRESH_TOKEN_HALI_123',
-      expiresIn: '1m',
+      expiresIn: '30m',
     };
 
     const refreshOptions = {
       secret: 'KEY_REFRESH_TOKEN_HALI_123',
-      expiresIn: '10m',
+      expiresIn: '2h',
     };
 
     const options =

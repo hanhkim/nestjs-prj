@@ -1,5 +1,13 @@
+import { CategoryEntity } from 'src/categories/category.entity';
 import { BaseEntity } from 'src/common/mysql/base.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'expense',
@@ -13,6 +21,10 @@ export class ExpenseEntity extends BaseEntity {
 
   @Column()
   categoryId: number;
+
+  @ManyToOne(() => CategoryEntity)
+  @JoinColumn({ name: 'categoryId' })
+  category: CategoryEntity;
 
   @Column({
     type: 'enum',
