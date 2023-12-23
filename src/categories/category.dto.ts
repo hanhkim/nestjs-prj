@@ -1,4 +1,4 @@
-import { Expose, Transform } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 export class CategoryDto {
   @Expose()
@@ -10,4 +10,7 @@ export class CategoryDto {
   parentId: number | null;
 
   type: string | null;
+
+  @Exclude()
+  userId: string;
 }

@@ -1,4 +1,3 @@
-import { Expose } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
@@ -13,9 +12,22 @@ export class CategoryEntity {
   })
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   parentId: number | null;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: ['expensed', 'earned', 'borrowed_lent'],
+    default: 'expensed',
+  })
   type: string | null;
+
+  @Column({
+    default: 'system',
+    select: false,
+  })
+  userId: string;
+
+  @Column()
+  icon: string;
 }

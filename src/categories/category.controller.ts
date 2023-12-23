@@ -7,6 +7,7 @@ import {
   Get,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './category.dto';
@@ -17,9 +18,17 @@ import { AccessTokenGuard } from '../auth/guards/accessToken.guard';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  // @Get()
+  // getAllCategories(): Promise<any> {
+  //   console.log('hello :>> ');
+  //   return this.categoryService.getAllCategories();
+  // }
+
   @Get()
-  getAllCategories(): Promise<any> {
-    return this.categoryService.getAllCategories();
+  getCategoriesByType(@Req() req): Promise<CategoryDto[]> {
+    const { type } = req.query;
+    console.log('type :>> ', type);
+    return this.categoryService.getCategoriesByType(type);
   }
 
   @Post()

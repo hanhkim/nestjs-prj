@@ -7,12 +7,15 @@ import {
   Post,
   Put,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ExpenseService } from './expense.service';
 import { ExpenseDto } from './expense.dto';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 import { Request } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(AccessTokenGuard)
 @Controller('transactions')
@@ -20,7 +23,13 @@ export class ExpenseController {
   constructor(private readonly expenseService: ExpenseService) {}
 
   @Post()
-  createExpense(@Body() body: ExpenseDto, @Req() req): Promise<ExpenseDto> {
+  @UseInterceptors(FileInterceptor('file'))
+  createExpense(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: ExpenseDto,
+    @Req() req,
+  ): Promise<ExpenseDto> {
+    console.log('file :>> ', file);
     const userId = req.user['sub'];
     const expense = { ...body, userId };
     return this.expenseService.save(expense);
@@ -36,6 +45,7 @@ export class ExpenseController {
 
   @Get(':id')
   getExpenseById(@Param('id') id: string): Promise<ExpenseDto> {
+    console.log('id :>> ', id);
     return this.expenseService.findOne(id);
   }
 
