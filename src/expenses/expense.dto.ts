@@ -23,7 +23,7 @@ export class ExpenseDto {
   @Expose()
   toWhom: string;
 
-  // @Expose()
+  @Expose()
   img: string;
 
   // @Expose()

@@ -16,22 +16,49 @@ import { ExpenseDto } from './expense.dto';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 import { Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { FileService } from 'src/file/file.service';
+import { AssetEntity } from 'src/file/file.entity';
+import { diskStorage } from 'multer';
 
 @UseGuards(AccessTokenGuard)
 @Controller('transactions')
 export class ExpenseController {
-  constructor(private readonly expenseService: ExpenseService) {}
+  constructor(
+    private readonly expenseService: ExpenseService,
+    private readonly assetService: FileService,
+  ) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  createExpense(
-    @UploadedFile() file: Express.Multer.File,
+  @UseInterceptors(
+    FileInterceptor('img', {
+      storage: diskStorage({
+        destination: (req, file, cb) => {
+          cb(null, './public/assets'); // specify the destination folder
+        },
+        filename: (req, file, cb) => {
+          const uniqueSuffix = Date.now();
+          cb(
+            null,
+            file.fieldname + '-' + uniqueSuffix + '-' + file.originalname,
+          );
+        },
+      }),
+    }),
+  )
+  async createExpense(
+    @UploadedFile() img: Express.Multer.File,
     @Body() body: ExpenseDto,
     @Req() req,
   ): Promise<ExpenseDto> {
-    console.log('file :>> ', file);
+    const result = await this.assetService.save(img as unknown as AssetEntity);
+
     const userId = req.user['sub'];
-    const expense = { ...body, userId };
+    const expense = {
+      ...body,
+      userId,
+      img: result.id,
+    };
+
     return this.expenseService.save(expense);
   }
 
@@ -44,9 +71,13 @@ export class ExpenseController {
   }
 
   @Get(':id')
-  getExpenseById(@Param('id') id: string): Promise<ExpenseDto> {
-    console.log('id :>> ', id);
-    return this.expenseService.findOne(id);
+  async getExpenseById(@Param('id') id: string): Promise<ExpenseDto> {
+    const result = await this.expenseService.findOne(id);
+
+    return {
+      ...result,
+      img: result.img ? this.assetService.getFullUrl(result.img) : null,
+    };
   }
 
   @Delete(':id')

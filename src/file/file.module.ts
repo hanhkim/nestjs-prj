@@ -10,5 +10,6 @@ import { AssetEntity } from './file.entity';
   controllers: [FileController],
   providers: [FileService],
   imports: [TypeOrmModule.forFeature([AssetEntity]), CloudinaryModule],
+  exports: [FileService],
 })
 export class FileModule {}

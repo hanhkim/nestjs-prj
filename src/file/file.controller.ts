@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
+  Param,
   Post,
   Req,
   Res,
@@ -15,6 +17,7 @@ import { Request, Response } from 'express';
 import { join } from 'path';
 import { FileService } from './file.service';
 import { AssetEntity } from './file.entity';
+import * as fs from 'fs';
 
 @Controller('assets')
 export class FileController {
@@ -55,13 +58,37 @@ export class FileController {
     const fileLocation = join(
       __dirname,
       '../..',
-      'public/imgs',
+      'public/assets',
       filename as string,
     );
 
     // Set appropriate headers for the response
     res.header('Content-Type', 'image/jpeg'); // Adjust content type based on your file type
     res.header('Content-Disposition', `inline; filename=${filename}`);
+
+    // Send the file to the frontend
+    return res.sendFile(fileLocation);
+  }
+
+  @Get(':id')
+  async getFileUrl(@Param('id') id: string, @Res() res: Response) {
+    const result = await this.fileService.findOne(id);
+
+    if (!result) {
+      throw new NotFoundException('File not found');
+    }
+
+    const fileLocation = join(__dirname, '../..', result.path);
+
+    const existFile = await fs.existsSync(fileLocation);
+
+    if (!result.path || !existFile) {
+      throw new NotFoundException('File not found');
+    }
+
+    // Set appropriate headers for the response
+    res.header('Content-Type', 'image/jpeg'); // Adjust content type based on your file type
+    res.header('Content-Disposition', `inline; filename=${result.filename}`);
 
     // Send the file to the frontend
     return res.sendFile(fileLocation);

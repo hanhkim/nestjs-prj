@@ -15,11 +15,15 @@ export class FileService extends MysqlBaseService<AssetEntity> {
     super(assetRepository);
   }
 
-  async save(expense: AssetEntity): Promise<FileDto> {
-    const savedAsset = await this.assetRepository.save(expense);
+  async save(asset: AssetEntity): Promise<FileDto> {
+    const savedAsset = await this.assetRepository.save(asset);
 
     return plainToInstance(FileDto, savedAsset, {
       excludeExtraneousValues: true,
     });
+  }
+
+  getFullUrl(id: string): string {
+    return `http://localhost:3009/assets/${id}`;
   }
 }
