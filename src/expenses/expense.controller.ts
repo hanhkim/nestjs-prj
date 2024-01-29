@@ -50,13 +50,16 @@ export class ExpenseController {
     @Body() body: ExpenseDto,
     @Req() req,
   ): Promise<ExpenseDto> {
-    const result = await this.assetService.save(img as unknown as AssetEntity);
+    let result;
+    if (img) {
+      result = await this.assetService.save(img as unknown as AssetEntity);
+    }
 
     const userId = req.user['sub'];
     const expense = {
       ...body,
       userId,
-      img: result.id,
+      img: result?.id,
     };
 
     return this.expenseService.save(expense);
@@ -87,7 +90,11 @@ export class ExpenseController {
 
   @Get()
   getTransactionList(@Req() request: Request): Promise<ExpenseDto> {
+    const userId = request.user['sub'];
     const { month } = request.query;
-    return this.expenseService.getTransactionList(month);
+    return this.expenseService.getTransactionList(
+      userId,
+      month as unknown as string,
+    );
   }
 }

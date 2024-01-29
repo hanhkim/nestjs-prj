@@ -15,4 +15,22 @@ export class WalletEntity extends BaseEntity {
 
   @Column()
   amount: number;
+
+  @Column({
+    nullable: true,
+  })
+  description: string;
+
+  @Column()
+  userId: string;
+
+  @Column({
+    nullable: true,
+  })
+  imgUrl: string;
+
+  @Column({
+    default: 'VND',
+  })
+  currencyUnit: string;
 }

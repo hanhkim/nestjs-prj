@@ -30,7 +30,6 @@ export class CategoryService {
   }
 
   async findOne(id: number): Promise<CategoryDto> {
-    console.log('fineOne :>> ', id);
     const category = await this.categoryRepository.findOneBy({ id });
 
     return plainToInstance(CategoryDto, category, {

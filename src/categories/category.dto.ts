@@ -9,6 +9,7 @@ export class CategoryDto {
 
   parentId: number | null;
 
+  @Expose()
   type: string | null;
 
   @Exclude()

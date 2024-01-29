@@ -9,4 +9,10 @@ export class WalletDto {
 
   @Expose()
   amount: number;
+
+  @Expose()
+  description: string;
+
+  @Expose()
+  imgUrl?: string;
 }

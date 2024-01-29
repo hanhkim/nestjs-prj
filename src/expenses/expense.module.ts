@@ -4,9 +4,14 @@ import { ExpenseEntity } from './expense.entity';
 import { ExpenseController } from './expense.controller';
 import { ExpenseService } from './expense.service';
 import { FileModule } from 'src/file/file.module';
+import { WalletModule } from 'src/wallets/wallet.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ExpenseEntity]), FileModule],
+  imports: [
+    TypeOrmModule.forFeature([ExpenseEntity]),
+    FileModule,
+    WalletModule,
+  ],
   controllers: [ExpenseController],
   providers: [ExpenseService],
 })

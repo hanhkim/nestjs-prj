@@ -6,17 +6,27 @@ import {
   Put,
   Get,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { WalletDto } from './wallet.dto';
+import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
+import { plainToInstance } from 'class-transformer';
 
+@UseGuards(AccessTokenGuard)
 @Controller('wallets')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
   @Post()
-  createWallet(@Body() wallet: WalletDto): Promise<WalletDto> {
-    return this.walletService.save(wallet);
+  createWallet(@Body() wallet: WalletDto, @Req() req): Promise<WalletDto> {
+    const userId = req.user['sub'];
+    const walletData = {
+      ...wallet,
+      userId,
+    };
+    return this.walletService.save(walletData);
   }
 
   @Put(':id')
@@ -28,8 +38,11 @@ export class WalletController {
   }
 
   @Get(':id')
-  getWalletById(@Param('id') id: string): Promise<WalletDto> {
-    return this.walletService.findOne(id);
+  async getWalletById(@Param('id') id: string): Promise<WalletDto> {
+    const result = await this.walletService.findOne(id);
+    return plainToInstance(WalletDto, result, {
+      excludeExtraneousValues: true,
+    });
   }
 
   @Delete(':id')
@@ -38,7 +51,8 @@ export class WalletController {
   }
 
   @Get()
-  getWalletList(): Promise<WalletDto> {
-    return this.walletService.getWalletList();
+  getWalletList(@Req() req): Promise<WalletDto> {
+    const userId = req.user['sub'];
+    return this.walletService.getWalletList(userId);
   }
 }
