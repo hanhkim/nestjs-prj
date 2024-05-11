@@ -12,7 +12,10 @@ import {
 import { CategoryService } from './category.service';
 import { CategoryDto } from './category.dto';
 import { AccessTokenGuard } from '../auth/guards/accessToken.guard';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ETransactionType } from 'src/enums/common';
 
+@ApiTags('categories')
 @UseGuards(AccessTokenGuard)
 @Controller('categories')
 export class CategoryController {
@@ -25,9 +28,19 @@ export class CategoryController {
   // }
 
   @Get()
+  @ApiQuery({
+    name: 'type',
+    required: true,
+    schema: {
+      enum: [
+        ETransactionType.EARNED,
+        ETransactionType.EXPENSED,
+        ETransactionType.BORROWED_LENT,
+      ],
+    },
+  })
   getCategoriesByType(@Req() req): Promise<CategoryDto[]> {
     const { type } = req.query;
-    console.log('type :>> ', type);
     return this.categoryService.getCategoriesByType(type);
   }
 

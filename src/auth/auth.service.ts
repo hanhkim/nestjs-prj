@@ -124,4 +124,6 @@ export class AuthService {
     console.log('newAccount :>> ', newAccount);
     return { id: newAccount.id };
   }
+
+  async getProfile(userId: string) {}
 }

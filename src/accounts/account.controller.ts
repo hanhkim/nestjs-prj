@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { AccountDto } from './account.dto';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('account')
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}

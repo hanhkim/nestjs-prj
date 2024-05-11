@@ -18,7 +18,9 @@ import { join } from 'path';
 import { FileService } from './file.service';
 import { AssetEntity } from './file.entity';
 import * as fs from 'fs';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('assets')
 @Controller('assets')
 export class FileController {
   constructor(

@@ -19,7 +19,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from 'src/file/file.service';
 import { AssetEntity } from 'src/file/file.entity';
 import { diskStorage } from 'multer';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('transactions')
 @UseGuards(AccessTokenGuard)
 @Controller('transactions')
 export class ExpenseController {

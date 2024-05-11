@@ -5,11 +5,16 @@ import { AccessTokenGuard } from './guards/accessToken.guard';
 import { Request } from 'express';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import { AccountDto } from 'src/accounts/account.dto';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOkResponse({
+    description: 'Login into money note with email and password',
+  })
   @Post('login')
   signin(@Body() data: AuthDto) {
     return this.authService.login(data.email, data.password);
@@ -32,7 +37,10 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @Get('profile')
   getProfile(@Req() req) {
-    return req.user;
+    return {
+      ...req.user,
+      defaultWallet: 'f5ec7b32-aefa-4aae-adf4-421fb6c74ff9',
+    };
   }
 
   @Post('register')

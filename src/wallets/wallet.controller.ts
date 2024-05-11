@@ -13,7 +13,9 @@ import { WalletService } from './wallet.service';
 import { WalletDto } from './wallet.dto';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 import { plainToInstance } from 'class-transformer';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('wallet')
 @UseGuards(AccessTokenGuard)
 @Controller('wallets')
 export class WalletController {
