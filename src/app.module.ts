@@ -10,7 +10,6 @@ import { ExpenseEntity } from './expenses/expense.entity';
 import { WalletEntity } from './wallets/wallet.entity';
 import { ExpenseModule } from './expenses/expense.module';
 import { WalletModule } from './wallets/wallet.module';
-// import { AuthModule } from './auth1/auth.module';
 import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -51,7 +50,7 @@ export const multerConfig = {
         AssetEntity,
       ],
       logging: 'all',
-      synchronize: true, // khi nao len product thi off nay vi no tu dong sync vao databas
+      synchronize: false, // khi nao len product thi off nay vi no tu dong sync vao databas
     }),
     AccountModule,
     CategoryModule,

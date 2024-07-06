@@ -7,6 +7,7 @@ import { AccountService } from 'src/accounts/account.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AccountDto } from 'src/accounts/account.dto';
+import { WalletDto } from 'src/wallets/wallet.dto';
 
 @Injectable()
 export class AuthService {
@@ -121,9 +122,27 @@ export class AuthService {
 
     const newAccount = await this.accountService.save(createAccountDto);
 
+    const newWallet: WalletDto = {
+      id: null,
+      name: 'Ví tiêu dùng',
+      amount: 0,
+      description: 'Ví tiêu dùng cá nhân, hằng ngày',
+      imgUrl: null,
+      isDefault: true,
+      setting: {
+        backgroundColor: 'blue',
+        textColor: 'white',
+      },
+    };
+
+    // create default wallet
+    // const defaulWallet = await this.walletService.save(newWallet);
+
     console.log('newAccount :>> ', newAccount);
     return { id: newAccount.id };
   }
 
-  async getProfile(userId: string) {}
+  async getProfile(userId: string) {
+    return await this.accountService.getProfile(userId);
+  }
 }

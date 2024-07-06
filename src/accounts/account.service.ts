@@ -4,12 +4,14 @@ import { AccountEntity } from './account.entity';
 import { Repository } from 'typeorm';
 import { AccountDto } from './account.dto';
 import { plainToInstance } from 'class-transformer';
+import { WalletService } from 'src/wallets/wallet.service';
 
 @Injectable()
 export class AccountService {
   constructor(
     @InjectRepository(AccountEntity)
     private readonly accountRepository: Repository<AccountEntity>,
+    private readonly walletService: WalletService,
   ) {}
 
   async save(user: AccountDto): Promise<AccountDto> {
@@ -54,5 +56,18 @@ export class AccountService {
     await this.accountRepository.update(userId, {
       refreshToken: refreshToken,
     });
+  }
+
+  async getProfile(userId: string) {
+    const user = await this.accountRepository.findOneBy({
+      id: userId,
+    });
+
+    const defaultWallet = await this.walletService.getWalletByIsDefault(userId);
+
+    return {
+      ...user,
+      defaultWallet,
+    };
   }
 }

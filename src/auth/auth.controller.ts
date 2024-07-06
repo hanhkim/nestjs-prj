@@ -37,10 +37,11 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @Get('profile')
   getProfile(@Req() req) {
-    return {
-      ...req.user,
-      defaultWallet: 'f5ec7b32-aefa-4aae-adf4-421fb6c74ff9',
-    };
+    return this.authService.getProfile(req.user['sub']);
+    // return {
+    //   ...req.user,
+    //   defaultWallet,
+    // };
   }
 
   @Post('register')

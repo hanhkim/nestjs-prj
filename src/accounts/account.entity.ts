@@ -1,6 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+export type Nullable<T> = T | null;
+
 @Entity({
   name: 'account',
 })
@@ -28,8 +30,8 @@ export class AccountEntity extends BaseEntity {
   })
   gender: string;
 
-  @Column()
-  address: string;
+  @Column({ type: 'varchar', nullable: true })
+  address: Nullable<string>;
 
   @Column()
   password: string;

@@ -33,4 +33,15 @@ export class WalletEntity extends BaseEntity {
     default: 'VND',
   })
   currencyUnit: string;
+
+  @Column({
+    default: false,
+  })
+  isDefault: boolean;
+
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
+  setting: string;
 }

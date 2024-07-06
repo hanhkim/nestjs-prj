@@ -21,4 +21,17 @@ export class WalletDto {
   @ApiProperty()
   @Expose()
   imgUrl?: string;
+
+  @ApiProperty()
+  @Expose()
+  isDefault: boolean;
+
+  @ApiProperty()
+  @Expose()
+  setting: WalletSetting;
+}
+
+export interface WalletSetting {
+  textColor: string;
+  backgroundColor: string;
 }

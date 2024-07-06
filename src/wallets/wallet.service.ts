@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { WalletDto } from './wallet.dto';
 import { plainToInstance } from 'class-transformer';
 import { MysqlBaseService } from 'src/common/mysql/base.service';
-import { CategoryDto } from 'src/categories/category.dto';
 import { ETransactionType } from 'src/enums/common';
 import { CategoryService } from 'src/categories/category.service';
 
@@ -20,8 +19,10 @@ export class WalletService extends MysqlBaseService<WalletEntity> {
   }
 
   async save(wallet: WalletDto): Promise<WalletDto> {
-    const savedWallet = await this.walletRepository.save(wallet);
-
+    const savedWallet = await this.walletRepository.save({
+      ...wallet,
+      setting: wallet?.setting ? flattenData(wallet.setting) : null,
+    });
     return plainToInstance(WalletDto, savedWallet, {
       excludeExtraneousValues: true,
     });
@@ -37,6 +38,15 @@ export class WalletService extends MysqlBaseService<WalletEntity> {
 
     console.log('list :>> ', list);
     return list;
+  }
+
+  async getWalletByIsDefault(userId: string): Promise<any> {
+    const existingDefaultWallet = await this.walletRepository.findOneBy({
+      userId: userId,
+      isDefault: true,
+    });
+
+    return existingDefaultWallet;
   }
 
   async calculateWalletBalance(
@@ -66,4 +76,34 @@ export class WalletService extends MysqlBaseService<WalletEntity> {
 
     return amount;
   }
+
+  async setDefaultWallet(userId: string, walletId: string): Promise<string> {
+    const foundDefaultWallet = await this.walletRepository.findOneBy({
+      userId: userId,
+      isDefault: true,
+    });
+
+    if (foundDefaultWallet) {
+      await this.walletRepository.update(foundDefaultWallet.id, {
+        ...foundDefaultWallet,
+        isDefault: false,
+      });
+    }
+
+    await this.walletRepository.update(walletId, {
+      isDefault: true,
+    });
+
+    return 'success';
+  }
+}
+
+export function flattenData(data) {
+  return JSON.stringify(data);
+  // return {
+  //   dataA: data.dataA,
+  //   dataB: data.nestedData.dataB,
+  //   dataC: data.nestedData.dataC,
+  //   dataD: data.dataD,
+  // };
 }
