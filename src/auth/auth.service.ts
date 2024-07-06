@@ -135,10 +135,6 @@ export class AuthService {
       },
     };
 
-    // create default wallet
-    // const defaulWallet = await this.walletService.save(newWallet);
-
-    console.log('newAccount :>> ', newAccount);
     return { id: newAccount.id };
   }
 
