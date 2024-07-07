@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WalletEntity } from './wallet.entity';
 import { Repository } from 'typeorm';
-import { WalletDto } from './wallet.dto';
+import { CreateWalletDto, WalletDto } from './wallet.dto';
 import { plainToInstance } from 'class-transformer';
 import { MysqlBaseService } from 'src/common/mysql/base.service';
 import { ETransactionType } from 'src/enums/common';
@@ -18,7 +18,7 @@ export class WalletService extends MysqlBaseService<WalletEntity> {
     super(walletRepository);
   }
 
-  async save(wallet: WalletDto): Promise<WalletDto> {
+  async save(wallet: CreateWalletDto): Promise<WalletDto> {
     const savedWallet = await this.walletRepository.save({
       ...wallet,
       setting: wallet?.setting ? flattenData(wallet.setting) : null,

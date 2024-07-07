@@ -10,7 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import { WalletDto } from './wallet.dto';
+import { CreateWalletDto, WalletDto } from './wallet.dto';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 import { plainToInstance } from 'class-transformer';
 import { ApiTags } from '@nestjs/swagger';
@@ -22,7 +22,10 @@ export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
   @Post()
-  createWallet(@Body() wallet: WalletDto, @Req() req): Promise<WalletDto> {
+  createWallet(
+    @Body() wallet: CreateWalletDto,
+    @Req() req,
+  ): Promise<WalletDto> {
     const userId = req.user['sub'];
     const walletData = {
       ...wallet,

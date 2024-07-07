@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { AccountDto } from './account.dto';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('account')
 @Controller('account')
