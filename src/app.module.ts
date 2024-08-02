@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AccountEntity } from './accounts/account.entity';
 import { AccountModule } from './accounts/account.module';
 import { CategoryModule } from './categories/category.module';
@@ -18,6 +18,8 @@ import { FileModule } from './file/file.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { diskStorage } from 'multer';
 import { AssetEntity } from './file/file.entity';
+import { ConfigModule } from '@nestjs/config';
+import { dbConfigurations } from './constants/dbConfig.constants';
 
 export const multerConfig = {
   storage: diskStorage({
@@ -37,11 +39,11 @@ export const multerConfig = {
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'kimhanh134',
-      database: 'hali_community',
+      host: dbConfigurations.ORM_HOST,
+      port: dbConfigurations.ORM_PORT as unknown as number,
+      username: dbConfigurations.ORM_USERNAME,
+      password: dbConfigurations.ORM_PASSWORD,
+      database: dbConfigurations.ORM_DB,
       entities: [
         AccountEntity,
         CategoryEntity,
@@ -50,7 +52,7 @@ export const multerConfig = {
         AssetEntity,
       ],
       logging: 'all',
-      synchronize: false, // khi nao len product thi off nay vi no tu dong sync vao databas
+      synchronize: dbConfigurations.ORM_SYNCHRONIZE as unknown as boolean, // khi nao len product thi off nay vi no tu dong sync vao databas
     }),
     AccountModule,
     CategoryModule,

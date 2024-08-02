@@ -4,8 +4,14 @@ import {
   DocumentBuilder,
   SwaggerDocumentOptions,
 } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+
 import { ValidationPipe } from '@nestjs/common';
+import * as dotenv from 'dotenv';
+
+const envFilePath = process.env.NODE_ENV === 'prod' ? '.env.prod' : '.env';
+dotenv.config({ path: envFilePath });
+
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

@@ -35,6 +35,7 @@ export class WalletEntity extends BaseEntity {
   currencyUnit: string;
 
   @Column({
+    type: 'boolean',
     default: false,
   })
   isDefault: boolean;
