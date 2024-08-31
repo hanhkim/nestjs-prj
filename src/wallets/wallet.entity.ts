@@ -45,4 +45,20 @@ export class WalletEntity extends BaseEntity {
     nullable: true,
   })
   setting: string;
+
+  @Column({
+    default: 0,
+  })
+  totalIncome: number;
+
+  @Column({
+    default: 0,
+  })
+  totalExpense: number;
+
+  @Column({ default: 0 })
+  transferAmount: number;
+
+  @Column({ default: 0 })
+  receiveAmount: number;
 }

@@ -93,10 +93,11 @@ export class ExpenseController {
   @Get()
   getTransactionList(@Req() request: Request): Promise<ExpenseDto> {
     const userId = request.user['sub'];
-    const { month } = request.query;
+    const { month, walletId } = request.query;
     return this.expenseService.getTransactionList(
       userId,
       month as unknown as string,
+      walletId as string,
     );
   }
 }

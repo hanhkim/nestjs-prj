@@ -83,4 +83,9 @@ export class WalletController {
     const userId = req.user['sub'];
     return this.walletService.setDefaultWallet(userId, id);
   }
+
+  @Get('/overview/:id')
+  async getWalletOverview(@Param('id') id: string): Promise<any> {
+    return this.walletService.getWalletOverview(id);
+  }
 }

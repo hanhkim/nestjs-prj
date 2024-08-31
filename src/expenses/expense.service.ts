@@ -31,11 +31,15 @@ export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
     });
   }
 
-  async getTransactionList(userId: string, month: string): Promise<any> {
+  async getTransactionList(
+    userId: string,
+    month: string,
+    walletId?: string,
+  ): Promise<any> {
     const startDate = dayjs(`2024-${month}-01`);
     const endDate = startDate.endOf('month');
 
-    const list = await this.expenseRepository
+    const queryBuilder = this.expenseRepository
       .createQueryBuilder('expense')
       .where('expense.userId=:userId', {
         userId: userId,
@@ -46,8 +50,13 @@ export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
         endDate: endDate.toDate(),
       })
       .leftJoinAndSelect('expense.category', 'category')
-      .orderBy('expense.date', 'DESC')
-      .getMany();
+      .orderBy('expense.date', 'DESC');
+
+    if (walletId) {
+      queryBuilder.andWhere('expense.walletId=:walletId', { walletId });
+    }
+
+    const list = await queryBuilder.getMany();
 
     return list;
   }

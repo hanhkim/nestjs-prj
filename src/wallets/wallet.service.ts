@@ -36,7 +36,6 @@ export class WalletService extends MysqlBaseService<WalletEntity> {
       })
       .getMany();
 
-    console.log('list :>> ', list);
     return list;
   }
 
@@ -60,7 +59,6 @@ export class WalletService extends MysqlBaseService<WalletEntity> {
 
     const category = await this.categoryService.findOne(categoryId); // todo: update category id to string
 
-    console.log('category hanh:>> ', category, transactionAmount);
     let amount = 0;
 
     if (category.type === ETransactionType.BORROWED_LENT) {
@@ -69,7 +67,6 @@ export class WalletService extends MysqlBaseService<WalletEntity> {
     } else {
       amount = Number(wallet.amount) - Number(transactionAmount);
     }
-    console.log('amount ne:>> ', wallet, amount);
 
     wallet.amount = amount;
     await this.walletRepository.save(wallet);
@@ -95,6 +92,14 @@ export class WalletService extends MysqlBaseService<WalletEntity> {
     });
 
     return 'success';
+  }
+
+  async getWalletOverview(walletId: string): Promise<any> {
+    const wallet = await this.walletRepository.findOneBy({
+      id: walletId,
+    });
+
+    return wallet;
   }
 }
 

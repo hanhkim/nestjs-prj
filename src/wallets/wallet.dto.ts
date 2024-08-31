@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export class WalletDto {
-  @ApiProperty()
-  @Expose()
-  id: string;
+export interface WalletSetting {
+  textColor: string;
+  backgroundColor: string;
+}
 
+export class CreateWalletDto {
   @ApiProperty()
   @Expose()
   name: string;
@@ -31,12 +32,45 @@ export class WalletDto {
   setting: WalletSetting;
 }
 
-export interface WalletSetting {
-  textColor: string;
-  backgroundColor: string;
+export class GeneralWalletDto {
+  @ApiProperty()
+  @Expose()
+  id: string;
+
+  @ApiProperty()
+  @Expose()
+  totalIncome: number;
+
+  @ApiProperty()
+  @Expose()
+  totalExpense: number;
+
+  @ApiProperty()
+  @Expose()
+  totalBalance: number; // should use this name instead of amount
+
+  @ApiProperty()
+  @Expose()
+  transferAmount?: number;
+
+  @ApiProperty()
+  @Expose()
+  receiveAmount: number;
+
+  // @ApiProperty()
+  // @Expose()
+  // amountFromMonth: number;
+
+  // @ApiProperty()
+  // @Expose()
+  // amountEndMonth: number;
 }
 
-export class CreateWalletDto {
+export class WalletDto extends GeneralWalletDto {
+  @ApiProperty()
+  @Expose()
+  id: string;
+
   @ApiProperty()
   @Expose()
   name: string;
