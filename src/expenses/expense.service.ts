@@ -7,6 +7,7 @@ import { plainToInstance } from 'class-transformer';
 import * as dayjs from 'dayjs';
 import { CategoryDto } from 'src/categories/category.dto';
 import { WalletService } from 'src/wallets/wallet.service';
+import { NotFoundException } from '@nestjs/common';
 
 export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
   constructor(
@@ -29,6 +30,54 @@ export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
     return plainToInstance(ExpenseDto, savedUser, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async update(id: string, data: ExpenseDto): Promise<string> {
+    const expense = await this.expenseRepository.findOneBy({
+      id,
+      deletedAt: null,
+    });
+
+    console.log('expense :>> ', expense, data.amount);
+    if (!expense) {
+      throw new NotFoundException('Expense not found');
+    }
+
+    if (expense.categoryId != data.categoryId) {
+      await this.walletService.calculateWalletBalance(
+        expense.walletId,
+        expense.categoryId,
+        -expense.amount,
+      );
+
+      await this.walletService.calculateWalletBalance(
+        expense.walletId,
+        data.categoryId,
+        data.amount,
+      );
+
+      await this.expenseRepository.update(id, data);
+    } else {
+      const amountDiff = +data.amount - expense.amount;
+
+      if (expense.amount !== data.amount) {
+        await this.walletService.calculateWalletBalance(
+          expense.walletId,
+          expense.categoryId,
+          amountDiff,
+        );
+      }
+    }
+
+    const newData = await this.expenseRepository.update(id, data);
+
+    console.log('newData :>> ', newData);
+
+    if (!newData) {
+      throw new Error('Cannot save data');
+    }
+
+    return 'updated successful';
   }
 
   async getTransactionList(

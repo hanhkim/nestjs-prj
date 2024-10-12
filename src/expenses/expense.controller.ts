@@ -68,10 +68,30 @@ export class ExpenseController {
   }
 
   @Put(':id')
+  @UseInterceptors(
+    FileInterceptor('img', {
+      storage: diskStorage({
+        destination: (req, file, cb) => {
+          cb(null, './public/assets'); // specify the destination folder
+        },
+        filename: (req, file, cb) => {
+          console.log('file :>> ', file);
+          const uniqueSuffix = Date.now();
+          cb(
+            null,
+            file.fieldname + '-' + uniqueSuffix + '-' + file.originalname,
+          );
+        },
+      }),
+    }),
+  )
   updateExpenseById(
     @Param('id') id: string,
-    @Body() expense: ExpenseDto,
-  ): Promise<string> {
+    @Body() expense: any,
+    @Req() req,
+  ): Promise<any> {
+    console.log('hello hanh :>> ', id, expense);
+
     return this.expenseService.update(id, expense);
   }
 
