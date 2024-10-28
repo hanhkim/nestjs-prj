@@ -8,6 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '@nestjs-modules/mailer';
 import { AccountDto } from 'src/accounts/account.dto';
+import { Queue } from 'bullmq';
+import { InjectQueue } from '@nestjs/bullmq';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ConfigService,
     private mailerService: MailerService,
+    @InjectQueue('send-mail') private readonly consumerMailQueue: Queue,
   ) {}
 
   async login(email: string, password: string): Promise<any> {
@@ -136,14 +139,7 @@ export class AuthService {
     //   },
     // };
 
-    await this.mailerService.sendMail({
-      to: createAccountDto.email,
-      subject: 'Welcome to money note',
-      template: './welcome',
-      context: {
-        email: createAccountDto.email,
-      },
-    });
+    await this.consumerMailQueue.add('send-mail', { ...createAccountDto }, {});
 
     return { id: newAccount.id };
   }
