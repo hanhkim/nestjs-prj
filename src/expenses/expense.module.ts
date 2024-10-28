@@ -5,12 +5,17 @@ import { ExpenseController } from './expense.controller';
 import { ExpenseService } from './expense.service';
 import { FileModule } from 'src/file/file.module';
 import { WalletModule } from 'src/wallets/wallet.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ExpenseEntity]),
     FileModule,
     WalletModule,
+    BullModule.registerQueue({
+      name: 'image_optimize',
+      prefix: 'flash-cards',
+    }),
   ],
   controllers: [ExpenseController],
   providers: [ExpenseService],

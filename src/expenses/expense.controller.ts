@@ -90,8 +90,6 @@ export class ExpenseController {
     @Body() expense: any,
     @Req() req,
   ): Promise<any> {
-    console.log('hello hanh :>> ', id, expense);
-
     return this.expenseService.update(id, expense);
   }
 

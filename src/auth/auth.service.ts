@@ -6,6 +6,7 @@ import {
 import { AccountService } from 'src/accounts/account.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { MailerService } from '@nestjs-modules/mailer';
 import { AccountDto } from 'src/accounts/account.dto';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class AuthService {
     private accountService: AccountService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private mailerService: MailerService,
   ) {}
 
   async login(email: string, password: string): Promise<any> {
@@ -133,6 +135,15 @@ export class AuthService {
     //     textColor: 'white',
     //   },
     // };
+
+    await this.mailerService.sendMail({
+      to: createAccountDto.email,
+      subject: 'Welcome to money note',
+      template: './welcome',
+      context: {
+        email: createAccountDto.email,
+      },
+    });
 
     return { id: newAccount.id };
   }

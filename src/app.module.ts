@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { BullModule } from '@nestjs/bullmq';
 import { AccountEntity } from './accounts/account.entity';
 import { AccountModule } from './accounts/account.module';
 import { CategoryModule } from './categories/category.module';
@@ -13,13 +14,15 @@ import { WalletModule } from './wallets/wallet.module';
 import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
 import { FileModule } from './file/file.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { diskStorage } from 'multer';
 import { AssetEntity } from './file/file.entity';
-import { ConfigModule } from '@nestjs/config';
 import { dbConfigurations } from './constants/dbConfig.constants';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 export const multerConfig = {
   storage: diskStorage({
@@ -65,6 +68,39 @@ export const multerConfig = {
     }),
     FileModule,
     CloudinaryModule,
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => {
+        console.log('__dirname :>> ', __dirname);
+        return {
+          transport: {
+            host: config.get('MAIL_HOST'),
+            secure: false,
+            auth: {
+              user: config.get('MAIL_USER'),
+              pass: config.get('MAIL_PASSWORD'),
+            },
+          },
+          defaults: {
+            from: `"No Reply" <${config.get('MAIL_FROM')}>`,
+          },
+          template: {
+            dir: join(__dirname, 'src/templates/email'),
+            adapter: new HandlebarsAdapter(),
+            options: {
+              strict: true,
+            },
+          },
+        };
+      },
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
