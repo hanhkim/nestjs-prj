@@ -53,9 +53,6 @@ export class CategoryService {
   async getCategoriesByType(type: ETransactionType): Promise<CategoryDto[]> {
     const list = await this.categoryRepository
       .createQueryBuilder('category')
-      .where({
-        type: type,
-      })
       .getMany();
     return list;
   }

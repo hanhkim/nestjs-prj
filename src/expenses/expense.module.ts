@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExpenseEntity } from './expense.entity';
 import { ExpenseController } from './expense.controller';
@@ -11,7 +11,7 @@ import { BullModule } from '@nestjs/bullmq';
   imports: [
     TypeOrmModule.forFeature([ExpenseEntity]),
     FileModule,
-    WalletModule,
+    forwardRef(() => WalletModule),
     BullModule.registerQueue({
       name: 'image_optimize',
       prefix: 'flash-cards',
@@ -19,5 +19,6 @@ import { BullModule } from '@nestjs/bullmq';
   ],
   controllers: [ExpenseController],
   providers: [ExpenseService],
+  exports: [ExpenseService],
 })
 export class ExpenseModule {}

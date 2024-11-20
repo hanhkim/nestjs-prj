@@ -77,7 +77,7 @@ export class WalletDto extends GeneralWalletDto {
 
   @ApiProperty()
   @Expose()
-  amount: number;
+  amount: string;
 
   @ApiProperty()
   @Expose()
@@ -94,4 +94,12 @@ export class WalletDto extends GeneralWalletDto {
   @ApiProperty()
   @Expose()
   setting: WalletSetting;
+}
+
+export class WalletTransferMoneyDto {
+  fromWalletId: string | null;
+  toWalletId: string | null;
+  amount: number;
+  note?: string;
+  date: Date | string;
 }

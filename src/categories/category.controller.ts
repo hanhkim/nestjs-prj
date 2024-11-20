@@ -41,6 +41,7 @@ export class CategoryController {
   })
   getCategoriesByType(@Req() req): Promise<CategoryDto[]> {
     const { type } = req.query;
+
     return this.categoryService.getCategoriesByType(type);
   }
 

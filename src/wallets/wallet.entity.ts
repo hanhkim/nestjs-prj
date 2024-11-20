@@ -13,8 +13,8 @@ export class WalletEntity extends BaseEntity {
   })
   name: string;
 
-  @Column()
-  amount: number;
+  @Column({ type: 'bigint' })
+  amount: string;
 
   @Column({
     nullable: true,

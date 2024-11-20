@@ -17,7 +17,13 @@ export class CategoryEntity {
 
   @Column({
     type: 'enum',
-    enum: ['expensed', 'earned', 'borrowed_lent'],
+    enum: [
+      'expensed',
+      'earned',
+      'borrowed_lent',
+      'transfer',
+      'receive_from_wallet',
+    ],
     default: 'expensed',
   })
   type: string | null;

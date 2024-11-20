@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 import {
   Body,
   Controller,
@@ -10,7 +11,11 @@ import {
   Req,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import { CreateWalletDto, WalletDto } from './wallet.dto';
+import {
+  CreateWalletDto,
+  WalletDto,
+  WalletTransferMoneyDto,
+} from './wallet.dto';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 import { plainToInstance } from 'class-transformer';
 import { ApiTags } from '@nestjs/swagger';
@@ -87,5 +92,14 @@ export class WalletController {
   @Get('/overview/:id')
   async getWalletOverview(@Param('id') id: string): Promise<any> {
     return this.walletService.getWalletOverview(id);
+  }
+
+  @Post('transfer-money')
+  transferMoney(
+    @Body() walletTransferMoney: WalletTransferMoneyDto,
+    @Req() req,
+  ): Promise<void> {
+    const userId = req.user['sub'];
+    return this.walletService.transferMoney(walletTransferMoney, userId);
   }
 }

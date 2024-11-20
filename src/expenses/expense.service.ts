@@ -7,19 +7,26 @@ import { plainToInstance } from 'class-transformer';
 import * as dayjs from 'dayjs';
 import { CategoryDto } from 'src/categories/category.dto';
 import { WalletService } from 'src/wallets/wallet.service';
-import { NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
+@Injectable()
 export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
   constructor(
     @InjectRepository(ExpenseEntity)
     private readonly expenseRepository: Repository<ExpenseEntity>,
+    @Inject(forwardRef(() => WalletService))
     private readonly walletService: WalletService,
   ) {
     super(expenseRepository);
   }
 
   async save(expense: ExpenseDto): Promise<ExpenseDto> {
-    const savedUser = await this.expenseRepository.save(expense);
+    const savedExpense = await this.expenseRepository.save(expense);
 
     await this.walletService.calculateWalletBalance(
       expense.walletId,
@@ -27,7 +34,15 @@ export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
       expense.amount,
     );
 
-    return plainToInstance(ExpenseDto, savedUser, {
+    return plainToInstance(ExpenseDto, savedExpense, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async saveWithoutCalculateWallet(expense: ExpenseDto): Promise<ExpenseDto> {
+    const savedExpense = await this.expenseRepository.save(expense);
+
+    return plainToInstance(ExpenseDto, savedExpense, {
       excludeExtraneousValues: true,
     });
   }
@@ -70,8 +85,6 @@ export class ExpenseService extends MysqlBaseService<ExpenseEntity> {
     }
 
     const newData = await this.expenseRepository.update(id, data);
-
-    console.log('newData :>> ', newData);
 
     if (!newData) {
       throw new Error('Cannot save data');
